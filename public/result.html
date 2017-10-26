@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>左右脑测试</title>
+</head>
+<body>
+  你的左脑年龄是<span id="leftBrainAge"></span> <br>
+  你的右脑年龄是<span id="rightBrainAge"></span>
+
+  <script src="https://files.jser.im/axios.js"></script>
+  <script>
+    axios.get('/getAgeByUserId').then(function (response) {
+      document.getElementById('leftBrainAge').innerText = response.data.left;
+      document.getElementById('rightBrainAge').innerText = response.data.right;
+    });
+  </script>
+</body>
+</html>

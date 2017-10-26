@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>左右脑测试</title>
+</head>
+<body>
+  <div id="app">
+    <img v-bind:src="currentQuestion.questionImg" alt="">
+    <div>{{currentQuestion.label}}</div>
+    <div>
+      <div v-for="answer in currentQuestion.answers">
+        <button @click="nextQuestion(answer)">{{answer.text}}</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://files.jser.im/vue.js"></script>
+  <script src="https://files.jser.im/axios.js"></script>
+  <script>
+    var questions = [
+      {
+        questionImg: './images/question1.png',
+        label: '这个男人的眼睛是在一条直线上吗？',
+        answers: [
+          {
+            options: 1,
+            text: '是',
+            img: ''
+          },
+          {
+            options: 2,
+            text: '不是',
+            img: ''
+          }
+        ]
+      },
+      {
+        questionImg: './images/question2.png',
+        label: '立方体中的竖线和哪条横向垂直',
+        answers: [
+          {
+            options: 1,
+            text: '上面的横线',
+          },
+          {
+            options: 2,
+            text: '下面的横线',
+          },
+        ]
+      },
+      {
+        questionImg: './images/question3.png',
+        label: '你能看到图中的字母吗？',
+        answers: [
+          {
+            options: 1,
+            text: '能'
+          },
+          {
+            options: 2,
+            text: '不能'
+          }
+        ]
+      }
+    ];
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        currentQuestionIndex: 0,
+        currentQuestion: questions[0],
+        userAnswers: [],
+      },
+      methods: {
+        nextQuestion: function (answer) {
+          this.userAnswers.push({
+            questionNo: this.currentQuestionIndex,
+            answer: answer.options
+          });
+          this.currentQuestionIndex = this.currentQuestionIndex + 1;
+          if (this.currentQuestionIndex === questions.length) {
+            axios.post('/getResult', this.userAnswers).then(function (response) {
+              location.href = 'result.html';
+            });
+            return;
+          }
+          this.currentQuestion = questions[this.currentQuestionIndex];
+        }
+      }
+    })
+  </script>
+</body>
+</html>
